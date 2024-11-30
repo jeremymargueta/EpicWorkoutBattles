@@ -22,3 +22,4 @@ Create outlines for these (make easier for user input) - Calories
   - Activity time
   - timestamp
   - type of activity
+    l;dkjflsakjf
