@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { validateEmail, validatePassword } from '../../utils/validation';
 import { registerUser } from '../../services/RegisterService';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './RegisterFormStyle.css';
@@ -25,6 +26,8 @@ const RegisterForm: React.FC = () => {
   });
 
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -80,6 +83,10 @@ const RegisterForm: React.FC = () => {
       console.log("Error Registering");
     }
 
+  };
+
+  const handleLoginClick = () => {
+    navigate('/'); // Navigate to the Login Page
   };
 
   return (
@@ -166,6 +173,13 @@ const RegisterForm: React.FC = () => {
         <button type="submit" className="btn btn-primary btn-block">
           Register
         </button>
+        <input
+            type="button"
+            id="login"
+            className="btn btn-secondary"
+            value="Login"
+            onClick={handleLoginClick}  // Replace with navigation logic
+          />
       </form>
     </div>
   );
