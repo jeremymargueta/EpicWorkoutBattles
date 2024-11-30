@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Login from './pages/loginPage/Login';
+import Login from './Pages/loginPage/Login';
 import RegisterForm from './components/RegisterForm/RegisterForm';
 
 const App: React.FC = () => {
