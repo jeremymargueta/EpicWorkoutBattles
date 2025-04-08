@@ -3,14 +3,16 @@ import pool from "../config/db";
 export interface User {
   id?: number;
   username: string;
+  fname: string;
+  lname: string;
   password: string;
   email: string;
 }
 
 export const createUser = async (user: User): Promise<void> => {
   await pool.query(
-    "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-    [user.username, user.email, user.password]
+    "INSERT INTO users (username,fname, lname, email, password) VALUES (?, ?, ?, ?, ?)",
+    [user.username, user.fname, user.lname, user.email, user.password]
   );
 };
 

@@ -11,9 +11,9 @@ export const registerUser = async (
 ): Promise<void> => {
   try {
     console.log("Taco3");
-    const { username, email, password } = req.body;
+    const { username, fname, lname, email, password } = req.body;
 
-    if (!username || !email || !password) {
+    if (!username || !fname || !lname || !email || !password) {
       res.status(400).json({ message: "All fields are required" });
       return;
     }
@@ -25,7 +25,13 @@ export const registerUser = async (
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser: User = { username, email, password: hashedPassword };
+    const newUser: User = {
+      username,
+      fname,
+      lname,
+      email,
+      password: hashedPassword,
+    };
     await createUser(newUser);
 
     res.status(201).json({ message: "User registered successfully" });
