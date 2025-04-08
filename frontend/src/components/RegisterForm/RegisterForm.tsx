@@ -9,8 +9,7 @@ import './RegisterFormStyle.css';
 
 // Stating Attributes
 interface RegisterFormData {
-  fname: string;
-  lname: string;
+  username: string;
   email: string;
   password: string;
   confirm_password: string;
@@ -18,8 +17,7 @@ interface RegisterFormData {
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
-    fname: '',
-    lname: '',
+    username: '',
     email: '',
     password: '',
     confirm_password: '',
@@ -41,7 +39,7 @@ const RegisterForm: React.FC = () => {
     e.preventDefault();
 
     // Basic validation
-    if (!formData.fname || !formData.lname || !formData.email || !formData.password) {
+    if (!formData.username || !formData.email || !formData.password) {
       setError('All fields are required.');
       return;
     }
@@ -94,35 +92,21 @@ const RegisterForm: React.FC = () => {
       <h2 className="text-center">Register</h2>
       {error && <p className="alert alert-danger">{error}</p>}
       <form onSubmit={handleSubmit} className="mt-4">
-        {/* First Name Field */}
+        {/* User Name Field */}
         <div className="form-group">
-          <label htmlFor="fname">First Name</label>
+          <label htmlFor="username">First Name</label>
           <input
             type="text"
-            id="fname"
-            name="fname"
+            id="username"
+            name="username"
             className="form-control"
-            value={formData.fname}
+            value={formData.username}
             onChange={handleChange}
-            placeholder="Enter your first name"
+            placeholder="Enter your username"
             required
           />
         </div>
 
-        {/* Last Name Field */}
-        <div className="form-group">
-          <label htmlFor="lname">Last Name</label>
-          <input
-            type="text"
-            id="lname"
-            name="lname"
-            className="form-control"
-            value={formData.lname}
-            onChange={handleChange}
-            placeholder="Enter your last name"
-            required
-          />
-        </div>
 
         {/* Email Field */}
         <div className="form-group">
