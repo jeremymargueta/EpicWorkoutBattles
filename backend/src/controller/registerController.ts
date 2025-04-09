@@ -24,7 +24,18 @@ export const registerUser = async (
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUsername = await findUserByEmail(username);
+    if (existingUsername) {
+      res.status(400).json({ message: "Username already exists" });
+      return;
+    }
+    const PEPPER_SECRET = process.env.PEPPER_SECRET || "";
+    const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || "12", 12);
+
+    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+
+    const hashedPassword = await bcrypt.hash(password + PEPPER_SECRET, salt);
+
     const newUser: User = {
       username,
       fname,
