@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { validateEmail, validatePassword, validateUsername, validateName } from '../../utils/validation';
-import { registerUser } from '../../services/RegisterService';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-import './RegisterFormStyle.css';
-
+import React, { useState } from "react";
+import {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+  validateName,
+} from "../../utils/validation";
+import { registerUser } from "../../services/RegisterService";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import zxcvbn from "zxcvbn";
+import "./RegisterFormStyle.css";
 
 // Stating Attributes
 interface RegisterFormData {
@@ -19,20 +23,23 @@ interface RegisterFormData {
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
-    username: '',
-    fname: '',
-    lname: '',
-    email: '',
-    password: '',
-    confirm_password: '',
+    username: "",
+    fname: "",
+    lname: "",
+    email: "",
+    password: "",
+    confirm_password: "",
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [password, setPassword] = useState("");
+  const strength = zxcvbn(password);
 
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setPassword(e.target.value);
     setFormData({
       ...formData,
       [name]: value,
@@ -43,33 +50,39 @@ const RegisterForm: React.FC = () => {
     e.preventDefault();
 
     // Basic validation
-    if (!formData.username || !formData.fname || !formData.lname || !formData.email || !formData.password) {
-      setError('All fields are required.');
+    if (
+      !formData.username ||
+      !formData.fname ||
+      !formData.lname ||
+      !formData.email ||
+      !formData.password
+    ) {
+      setError("All fields are required.");
       return;
     }
 
-    if(!validateUsername(formData.username)){
-      setError('Invalid Username');
+    if (!validateUsername(formData.username)) {
+      setError("Invalid Username");
       return;
     }
 
-    if(!validateName(formData.fname)){
-      setError('Invalid First name');
+    if (!validateName(formData.fname)) {
+      setError("Invalid First name");
       return;
     }
 
-    if(!validateName(formData.lname)){
-      setError('Invalid Last name');
+    if (!validateName(formData.lname)) {
+      setError("Invalid Last name");
       return;
     }
 
     if (!validateEmail(formData.email)) {
-      setError('Invalid email address.');
+      setError("Invalid email address.");
       return;
     }
 
     if (!validatePassword(formData.password)) {
-      setError('Password must be at least 6 characters.');
+      setError("Password must be at least 6 characters.");
       return;
     }
 
@@ -77,19 +90,25 @@ const RegisterForm: React.FC = () => {
     const upper_letter_check = /[A-Z]/;
     const number_check = /[0-9]/;
 
-    if (!lower_letter_check.test(formData.password) || !upper_letter_check.test(formData.password) || !number_check.test(formData.password)) {
-        setError('Password must container an upper case letter, lower case letter, and a number');
-        return;
-        //password_error.innerHTML = "Password must contain at least one letter and one number";
+    if (
+      !lower_letter_check.test(formData.password) ||
+      !upper_letter_check.test(formData.password) ||
+      !number_check.test(formData.password)
+    ) {
+      setError(
+        "Password must container an upper case letter, lower case letter, and a number"
+      );
+      return;
+      //password_error.innerHTML = "Password must contain at least one letter and one number";
     }
 
-    if(formData.confirm_password === "" || formData.confirm_password == null) {
-        setError('Confirm Password required');
-        return;
+    if (formData.confirm_password === "" || formData.confirm_password == null) {
+      setError("Confirm Password required");
+      return;
     }
 
     if (formData.password !== formData.confirm_password) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
 
@@ -99,11 +118,10 @@ const RegisterForm: React.FC = () => {
     } catch (error) {
       console.log("Error Registering");
     }
-
   };
 
   const handleLoginClick = () => {
-    navigate('/'); // Navigate to the Login Page
+    navigate("/"); // Navigate to the Login Page
   };
 
   return (
@@ -113,7 +131,7 @@ const RegisterForm: React.FC = () => {
       <form onSubmit={handleSubmit} className="mt-4">
         {/* User Name Field */}
         <div className="form-group">
-          <label htmlFor="username">First Name</label>
+          <label htmlFor="username">User Name</label>
           <input
             type="text"
             id="username"
@@ -141,9 +159,9 @@ const RegisterForm: React.FC = () => {
           />
         </div>
 
-         {/* Last Name Field */}
-         <div className="form-group">
-          <label htmlFor="lastname">First Name</label>
+        {/* Last Name Field */}
+        <div className="form-group">
+          <label htmlFor="lastname">Last Name</label>
           <input
             type="text"
             id="lname"
@@ -184,6 +202,7 @@ const RegisterForm: React.FC = () => {
             placeholder="Enter a strong password"
             required
           />
+          <p> Strength: {strength.score} / 4</p>
         </div>
 
         {/* Confirm Password Field */}
@@ -206,12 +225,12 @@ const RegisterForm: React.FC = () => {
           Register
         </button>
         <input
-            type="button"
-            id="login"
-            className="btn btn-secondary"
-            value="Login"
-            onClick={handleLoginClick}  // Replace with navigation logic
-          />
+          type="button"
+          id="login"
+          className="btn btn-secondary"
+          value="Login"
+          onClick={handleLoginClick} // Replace with navigation logic
+        />
       </form>
     </div>
   );

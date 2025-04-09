@@ -1,4 +1,3 @@
-
 interface RegisterFormData {
   username: string;
   fname: string;
@@ -9,6 +8,6 @@ interface RegisterFormData {
 }
 
 export const registerUser = async (data: RegisterFormData) => {
-  // const response = await axios.post('http://localhost:5000/api/register', data);
+  const response = await fetch("http://localhost:5555/api/register");
   // return response.data; // Assuming backend returns JSON
 };
